@@ -1,0 +1,4 @@
+Broj kartice	4242 4242 4242 4242
+Datum	12 / 34
+CVV	123
+Ime	bilo šta

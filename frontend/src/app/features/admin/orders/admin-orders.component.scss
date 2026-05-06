@@ -1,0 +1,23 @@
+.filters-bar {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+  padding: 16px 18px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+
+  .search-field { flex: 1; min-width: 200px; }
+  mat-form-field { margin-bottom: 0 !important; }
+}
+
+.full-width { width: 100%; }
+
+.customer-cell {
+  display: flex;
+  flex-direction: column;
+  .meta { font-size: 0.73rem; color: var(--text-muted); margin-top: 2px; }
+}
+
+.status-select { font-size: 0.83rem; font-weight: 600; }

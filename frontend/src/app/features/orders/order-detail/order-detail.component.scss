@@ -1,0 +1,99 @@
+.back-btn {
+  color: var(--text-muted) !important;
+  margin-bottom: 24px;
+  font-size: 0.85rem !important;
+  &:hover { color: var(--text) !important; }
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.order-id-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.3px;
+}
+
+.order-date { color: var(--text-muted); font-size: 0.83rem; margin-top: 4px; }
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  border: 1px solid currentColor;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  @media (max-width: 768px) { grid-template-columns: 1fr; }
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--border);
+  &:last-child { border: none; }
+}
+
+.item-img {
+  width: 64px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.item-info { flex: 1; }
+.item-name { font-weight: 600; font-size: 0.88rem; color: var(--text); }
+.item-meta { color: var(--text-muted); font-size: 0.75rem; margin-top: 2px; }
+.item-price { font-weight: 700; color: var(--accent); font-size: 0.88rem; white-space: nowrap; }
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--text);
+}
+
+.session-id {
+  font-family: 'Courier New', monospace;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 4px 10px;
+  display: inline-block;
+}
+
+.info-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 5px;
+}
+
+.info-value {
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.5;
+}

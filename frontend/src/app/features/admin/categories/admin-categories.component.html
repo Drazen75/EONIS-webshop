@@ -1,0 +1,90 @@
+<div class="container" style="padding-top: 36px; padding-bottom: 56px">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <a mat-button routerLink="/admin" class="back-btn">
+        <mat-icon>arrow_back</mat-icon> Admin panel
+      </a>
+      <h1 class="page-title" style="margin-bottom:0">Kategorije</h1>
+    </div>
+    <button mat-raised-button color="accent" (click)="openCreate()" [disabled]="formVisible">
+      <mat-icon>add</mat-icon> Nova kategorija
+    </button>
+  </div>
+
+  <!-- Inline form -->
+  <mat-card class="form-card" *ngIf="formVisible">
+    <h3 class="form-title">{{ editingId ? 'Izmeni kategoriju' : 'Nova kategorija' }}</h3>
+    <form [formGroup]="form" (ngSubmit)="save()" class="cat-form">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Naziv kategorije</mat-label>
+        <input matInput formControlName="name" placeholder="npr. Dnevna soba">
+        <mat-error *ngIf="form.get('name')?.hasError('required')">Naziv je obavezan</mat-error>
+        <mat-error *ngIf="form.get('name')?.hasError('minlength')">Minimum 2 karaktera</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Opis</mat-label>
+        <textarea matInput formControlName="description" rows="2"
+                  placeholder="Kratki opis kategorije..."></textarea>
+        <mat-error *ngIf="form.get('description')?.hasError('required')">Opis je obavezan</mat-error>
+      </mat-form-field>
+
+      <div class="form-actions">
+        <button mat-stroked-button type="button" (click)="cancel()" [disabled]="saving">
+          Otkaži
+        </button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="saving">
+          <mat-spinner diameter="18" *ngIf="saving"></mat-spinner>
+          {{ saving ? 'Čuvanje...' : (editingId ? 'Sačuvaj izmene' : 'Kreiraj kategoriju') }}
+        </button>
+      </div>
+    </form>
+  </mat-card>
+
+  <!-- Table -->
+  <div class="loading-wrapper" *ngIf="loading"><mat-spinner diameter="44"></mat-spinner></div>
+
+  <div class="empty-state" *ngIf="!loading && categories.length === 0">
+    <mat-icon>category</mat-icon>
+    <h3>Nema kategorija</h3>
+    <p>Kreirajte prvu kategoriju</p>
+  </div>
+
+  <table mat-table [dataSource]="categories" *ngIf="!loading && categories.length > 0" class="cat-table">
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>#</th>
+      <td mat-cell *matCellDef="let cat">{{ cat.id }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Naziv</th>
+      <td mat-cell *matCellDef="let cat">
+        <span class="cat-name">{{ cat.name }}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef>Opis</th>
+      <td mat-cell *matCellDef="let cat" class="desc-cell">{{ cat.description }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef style="text-align:right">Akcije</th>
+      <td mat-cell *matCellDef="let cat" class="actions-cell">
+        <button mat-icon-button matTooltip="Izmeni" (click)="openEdit(cat)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Obriši" (click)="delete(cat)" class="delete-btn">
+          <mat-icon>delete_outline</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+</div>

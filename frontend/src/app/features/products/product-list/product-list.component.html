@@ -1,0 +1,121 @@
+<div class="catalog-page container">
+
+  <!-- Page header -->
+  <div class="catalog-header">
+    <div>
+      <h1 class="page-title" style="margin-bottom: 4px">Katalog nameštaja</h1>
+      <p class="results-meta" *ngIf="!loading">
+        {{ totalElements }} {{ totalElements === 1 ? 'proizvod' : (totalElements < 5 ? 'proizvoda' : 'proizvoda') }}
+      </p>
+    </div>
+    <mat-form-field appearance="outline" class="sort-select">
+      <mat-label>Sortiranje</mat-label>
+      <mat-select [(ngModel)]="sortBy" (selectionChange)="onSortChange()">
+        <mat-option *ngFor="let opt of sortOptions" [value]="opt.value">{{ opt.label }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="catalog-layout">
+
+    <!-- ── Left sidebar filter ── -->
+    <aside class="filter-sidebar">
+
+      <!-- Search -->
+      <div class="filter-block">
+        <h5 class="filter-title">Pretraga</h5>
+        <mat-form-field appearance="outline" class="filter-field">
+          <input matInput [formControl]="searchCtrl" placeholder="Naziv ili opis...">
+          <mat-icon matPrefix>search</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <!-- Categories -->
+      <div class="filter-block">
+        <h5 class="filter-title">Kategorije</h5>
+        <div class="cat-filter-list">
+          <button
+            class="cat-filter-btn"
+            [class.active]="selectedCategory === null"
+            (click)="selectCategory(null)">
+            <mat-icon>apps</mat-icon> Sve kategorije
+          </button>
+          <button
+            *ngFor="let cat of categories"
+            class="cat-filter-btn"
+            [class.active]="selectedCategory === cat.id"
+            (click)="selectCategory(cat.id)">
+            <mat-icon>chevron_right</mat-icon>
+            {{ cat.name }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Price range -->
+      <div class="filter-block">
+        <h5 class="filter-title">Cena (RSD)</h5>
+        <div class="price-inputs">
+          <mat-form-field appearance="outline" class="filter-field price-field">
+            <mat-label>Od</mat-label>
+            <input matInput type="number" [formControl]="minPriceCtrl" placeholder="0" min="0">
+          </mat-form-field>
+          <span class="price-sep">—</span>
+          <mat-form-field appearance="outline" class="filter-field price-field">
+            <mat-label>Do</mat-label>
+            <input matInput type="number" [formControl]="maxPriceCtrl" placeholder="∞" min="0">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Reset -->
+      <button mat-stroked-button class="reset-btn" (click)="clearFilters()" *ngIf="hasActiveFilters()">
+        <mat-icon>restart_alt</mat-icon> Resetuj filtere
+      </button>
+
+    </aside>
+
+    <!-- ── Main grid ── -->
+    <div class="catalog-main">
+
+      <div class="loading-wrapper" *ngIf="loading">
+        <mat-spinner diameter="44"></mat-spinner>
+      </div>
+
+      <div class="empty-state" *ngIf="!loading && products.length === 0">
+        <mat-icon>search_off</mat-icon>
+        <h3>Nema pronađenih proizvoda</h3>
+        <p>Pokušajte sa drugačijim filterima</p>
+      </div>
+
+      <div class="product-grid" *ngIf="!loading && products.length > 0">
+        <mat-card class="product-card" *ngFor="let p of products" (click)="goToProduct(p.id)">
+          <img mat-card-image
+               [src]="p.imageUrl || 'https://placehold.co/400x300?text=' + p.name"
+               [alt]="p.name">
+          <mat-card-content>
+            <span class="category-chip">{{ p.category?.name }}</span>
+            <h3 class="product-name">{{ p.name }}</h3>
+            <p class="price-tag">{{ p.price | number:'1.0-0' }} RSD</p>
+            <div class="stock-info">
+              <span class="badge-out-of-stock" *ngIf="p.stockQuantity === 0">Nema na stanju</span>
+              <span class="badge-stock-low"    *ngIf="p.stockQuantity > 0 && p.stockQuantity < 3">Poslednji primerci</span>
+              <span class="in-stock"           *ngIf="p.stockQuantity >= 3">Na stanju</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <mat-paginator
+        *ngIf="totalElements > 0"
+        [length]="totalElements"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[6, 12, 24]"
+        [pageIndex]="page"
+        (page)="onPageChange($event)"
+        showFirstLastButtons>
+      </mat-paginator>
+
+    </div>
+  </div>
+
+</div>

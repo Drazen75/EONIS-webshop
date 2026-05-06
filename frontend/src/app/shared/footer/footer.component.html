@@ -1,0 +1,63 @@
+<footer class="footer">
+  <div class="container footer-grid">
+
+    <!-- Brand column -->
+    <div class="footer-col brand-col">
+      <div class="footer-brand">
+        <mat-icon>chair</mat-icon>
+        <span>FurnitureStore</span>
+      </div>
+      <p class="footer-tagline">
+        Kvalitetan nameštaj koji transformiše vaš dom. Dostava širom Srbije u roku od 3–7 radnih dana.
+      </p>
+      <div class="social-row">
+        <a href="#" class="social-btn" aria-label="Facebook"><mat-icon>facebook</mat-icon></a>
+        <a href="#" class="social-btn" aria-label="Instagram"><mat-icon>photo_camera</mat-icon></a>
+      </div>
+    </div>
+
+    <!-- Categories column -->
+    <div class="footer-col">
+      <h4 class="footer-heading">Kategorije</h4>
+      <ul class="footer-links">
+        <li *ngFor="let cat of categories">
+          <a (click)="goToCategory(cat.id)">{{ cat.name }}</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Info column -->
+    <div class="footer-col">
+      <h4 class="footer-heading">Informacije</h4>
+      <ul class="footer-links">
+        <li><a routerLink="/products">Katalog</a></li>
+        <li><a routerLink="/register">Registracija</a></li>
+        <li><a routerLink="/login">Prijava</a></li>
+        <li><a routerLink="/orders">Moje porudžbine</a></li>
+      </ul>
+    </div>
+
+    <!-- Contact column -->
+    <div class="footer-col">
+      <h4 class="footer-heading">Kontakt</h4>
+      <ul class="footer-links contact-list">
+        <li><mat-icon>location_on</mat-icon> Bulevar Oslobođenja 34, Beograd</li>
+        <li><mat-icon>phone</mat-icon> +381 11 123 4567</li>
+        <li><mat-icon>email</mat-icon> info&#64;furniturestore.rs</li>
+        <li><mat-icon>schedule</mat-icon> Pon–Sub: 09:00–20:00</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <div class="container footer-bottom-inner">
+      <span>© {{ year }} FurnitureStore. Sva prava zadržana.</span>
+      <div class="payment-badges">
+        <span class="badge">Stripe</span>
+        <span class="badge">Visa</span>
+        <span class="badge">Mastercard</span>
+      </div>
+    </div>
+  </div>
+</footer>

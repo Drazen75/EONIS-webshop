@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: furniture_db
+    environment:
+      POSTGRES_DB: furniturestore
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - furniture_net
+
+  backend:
+    build: ./backend
+    container_name: furniture_backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/furniturestore
+      SPRING_DATASOURCE_USERNAME: ${DB_USER:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-postgres}
+      JWT_SECRET: ${JWT_SECRET:-super-secret-key-for-furniture-store-application-2025-needs-256-bits-minimum}
+      JWT_EXPIRATION: ${JWT_EXPIRATION:-86400000}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
+      STRIPE_SUCCESS_URL: ${STRIPE_SUCCESS_URL:-http://localhost:4200/checkout/success}
+      STRIPE_CANCEL_URL: ${STRIPE_CANCEL_URL:-http://localhost:4200/checkout/cancel}
+    ports:
+      - "8080:8080"
+    networks:
+      - furniture_net
+
+  frontend:
+    build: ./frontend
+    container_name: furniture_frontend
+    depends_on:
+      - backend
+    ports:
+      - "4200:80"
+    networks:
+      - furniture_net
+
+volumes:
+  postgres_data:
+
+networks:
+  furniture_net:
+    driver: bridge

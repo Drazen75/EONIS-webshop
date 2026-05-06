@@ -1,0 +1,88 @@
+<div class="container" style="padding-top:36px; padding-bottom:56px">
+  <h1 class="page-title">Vaša korpa</h1>
+
+  <div class="loading-wrapper" *ngIf="loading"><mat-spinner diameter="48"></mat-spinner></div>
+
+  <div class="empty-state" *ngIf="!loading && (!cart || cart.items.length === 0)">
+    <mat-icon>shopping_cart</mat-icon>
+    <h3>Korpa je prazna</h3>
+    <p>Dodajte proizvode iz kataloga</p>
+    <a mat-raised-button color="primary" routerLink="/products" style="margin-top:20px">
+      <mat-icon>store</mat-icon> Pregledaj katalog
+    </a>
+  </div>
+
+  <div class="cart-layout" *ngIf="!loading && cart && cart.items.length > 0">
+
+    <div class="cart-items">
+      <mat-card class="cart-item" *ngFor="let item of cart.items">
+        <img [src]="item.productImageUrl || 'https://placehold.co/120x90'" [alt]="item.productName" class="item-img">
+        <div class="item-info">
+          <a [routerLink]="['/products', item.productId]" class="item-name">{{ item.productName }}</a>
+          <p class="item-price">{{ item.productPrice | number:'1.0-0' }} RSD / kom</p>
+        </div>
+        <div class="item-qty">
+          <button mat-icon-button (click)="updateQty(item.productId, item.quantity - 1)" [disabled]="item.quantity <= 1">
+            <mat-icon>remove</mat-icon>
+          </button>
+          <span>{{ item.quantity }}</span>
+          <button mat-icon-button (click)="updateQty(item.productId, item.quantity + 1)"
+                  [disabled]="item.quantity >= item.stockQuantity">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+        <p class="item-subtotal">{{ item.subtotal | number:'1.0-0' }} RSD</p>
+        <button mat-icon-button (click)="removeItem(item.productId)" style="color: var(--red)">
+          <mat-icon>delete_outline</mat-icon>
+        </button>
+      </mat-card>
+
+      <div style="text-align:right; margin-top:4px">
+        <button mat-stroked-button class="clear-btn" (click)="clearCart()">
+          <mat-icon>delete_sweep</mat-icon> Isprazni korpu
+        </button>
+      </div>
+    </div>
+
+    <mat-card class="order-summary">
+      <mat-card-header>
+        <mat-card-title>Pregled porudžbine</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="summary-row" *ngFor="let item of cart.items">
+          <span>{{ item.productName }} × {{ item.quantity }}</span>
+          <span>{{ item.subtotal | number:'1.0-0' }} RSD</span>
+        </div>
+        <mat-divider style="margin:16px 0"></mat-divider>
+        <div class="summary-total">
+          <span>Ukupno</span>
+          <span class="price-tag">{{ cart.totalAmount | number:'1.0-0' }} RSD</span>
+        </div>
+
+        <mat-form-field appearance="outline" style="width:100%; margin-top:22px">
+          <mat-label>Adresa dostave</mat-label>
+          <textarea matInput [formControl]="shippingCtrl" rows="3"
+                    placeholder="Ulica i broj, grad, poštanski broj"></textarea>
+          <mat-icon matPrefix>location_on</mat-icon>
+          <mat-hint *ngIf="addressPrefilled">
+            <mat-icon style="font-size:13px;height:13px;width:13px;vertical-align:middle">person</mat-icon>
+            Preuzeto iz vašeg profila — možete izmeniti
+          </mat-hint>
+          <mat-error *ngIf="shippingCtrl.hasError('required')">Adresa je obavezna</mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" class="checkout-btn"
+                [disabled]="checkingOut" (click)="checkout()">
+          <mat-spinner diameter="20" *ngIf="checkingOut"></mat-spinner>
+          <mat-icon *ngIf="!checkingOut">payment</mat-icon>
+          {{ checkingOut ? 'Preusmeravanje...' : 'Plati karticom (Stripe)' }}
+        </button>
+
+        <p class="secure-note">
+          <mat-icon>lock</mat-icon> Sigurno plaćanje putem Stripe-a
+        </p>
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+</div>

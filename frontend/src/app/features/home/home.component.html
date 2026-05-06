@@ -1,0 +1,53 @@
+<section class="hero">
+  <div class="hero-content">
+    <span class="hero-eyebrow">Nova kolekcija 2025</span>
+    <h1>Nameštaj koji <span class="gold">definiše</span><br>vaš prostor</h1>
+    <p>Pažljivo odabrani komadi koji spajaju funkcionalnost i estetiku. Dostava širom Srbije.</p>
+    <div class="hero-actions">
+      <a mat-raised-button color="accent" routerLink="/products">
+        Pregledaj katalog
+      </a>
+      <a mat-stroked-button routerLink="/register">Besplatna registracija</a>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+
+  <div style="margin-top: 60px; margin-bottom: 52px">
+    <p class="section-label">Asortiman</p>
+    <h2 class="section-title">Kategorije nameštaja</h2>
+    <div class="category-grid">
+      <mat-card class="category-card" *ngFor="let cat of categories" (click)="goToCategory(cat.id)">
+        <div class="cat-icon-wrap">
+          <mat-icon>category</mat-icon>
+        </div>
+        <div class="cat-name">{{ cat.name }}</div>
+        <div class="cat-desc">{{ cat.description }}</div>
+        <mat-icon class="cat-arrow">arrow_forward</mat-icon>
+      </mat-card>
+    </div>
+  </div>
+
+  <div style="margin-bottom: 60px">
+    <p class="section-label">Istaknuto</p>
+    <h2 class="section-title">Novi u ponudi</h2>
+    <div class="product-grid">
+      <mat-card class="product-card" *ngFor="let p of featured" (click)="goToProduct(p.id)">
+        <img mat-card-image [src]="p.imageUrl || 'https://placehold.co/400x300?text=' + p.name" [alt]="p.name">
+        <mat-card-content>
+          <p class="feat-category">{{ p.category?.name }}</p>
+          <h3 class="feat-name">{{ p.name }}</h3>
+          <p class="price-tag">{{ p.price | number:'1.0-0' }} RSD</p>
+          <span class="badge-out-of-stock" *ngIf="p.stockQuantity === 0">Nema na stanju</span>
+          <span class="badge-stock-low" *ngIf="p.stockQuantity > 0 && p.stockQuantity < 3">Poslednji primerci</span>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="cta-strip">
+      <a mat-stroked-button routerLink="/products">Svi proizvodi →</a>
+    </div>
+  </div>
+
+</div>

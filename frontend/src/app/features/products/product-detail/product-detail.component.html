@@ -1,0 +1,55 @@
+<div class="container" style="padding-top: 32px; padding-bottom: 48px">
+  <div class="loading-wrapper" *ngIf="loading"><mat-spinner diameter="48"></mat-spinner></div>
+
+  <div class="detail-layout" *ngIf="product && !loading">
+    <button mat-button routerLink="/products" class="back-btn">
+      <mat-icon>arrow_back</mat-icon> Nazad na katalog
+    </button>
+
+    <div class="detail-grid">
+      <div class="image-section">
+        <img [src]="product.imageUrl || 'https://placehold.co/600x450?text=' + product.name"
+             [alt]="product.name" class="main-image">
+      </div>
+
+      <div class="info-section">
+        <span class="category-label">{{ product.category?.name }}</span>
+        <h1 class="product-title">{{ product.name }}</h1>
+        <p class="price-tag">{{ product.price | number:'1.0-0' }} RSD</p>
+
+        <mat-divider style="margin: 20px 0"></mat-divider>
+
+        <p class="description">{{ product.description }}</p>
+
+        <mat-divider style="margin: 20px 0"></mat-divider>
+
+        <div class="stock-row">
+          <mat-icon [class.text-success]="product.stockQuantity > 0" [class.text-error]="product.stockQuantity === 0">
+            {{ product.stockQuantity > 0 ? 'check_circle' : 'cancel' }}
+          </mat-icon>
+          <span *ngIf="product.stockQuantity > 0">Na stanju ({{ product.stockQuantity }} kom)</span>
+          <span *ngIf="product.stockQuantity === 0" class="text-error">Nije dostupno</span>
+        </div>
+
+        <div class="quantity-row" *ngIf="product.stockQuantity > 0">
+          <span>Količina:</span>
+          <button mat-icon-button (click)="decreaseQty()" [disabled]="quantity <= 1">
+            <mat-icon>remove</mat-icon>
+          </button>
+          <span class="qty-value">{{ quantity }}</span>
+          <button mat-icon-button (click)="increaseQty()" [disabled]="quantity >= product.stockQuantity">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+
+        <button mat-raised-button color="primary" class="add-btn"
+                [disabled]="product.stockQuantity === 0 || addingToCart"
+                (click)="addToCart()">
+          <mat-spinner diameter="20" *ngIf="addingToCart"></mat-spinner>
+          <mat-icon *ngIf="!addingToCart">shopping_cart</mat-icon>
+          {{ addingToCart ? 'Dodavanje...' : 'Dodaj u korpu' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

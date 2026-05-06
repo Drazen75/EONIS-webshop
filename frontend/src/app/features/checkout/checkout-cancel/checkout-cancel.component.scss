@@ -1,0 +1,70 @@
+.cancel-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 64px);
+  padding: 56px 24px;
+}
+
+.cancel-card {
+  position: relative;
+  text-align: center;
+  max-width: 460px;
+  width: 100%;
+  padding: 52px 40px;
+  background: var(--bg2);
+  border: 1px solid var(--border-h);
+  border-radius: 14px;
+  box-shadow: var(--shadow-lg);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 20%; right: 20%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--red), transparent);
+    border-radius: 1px;
+  }
+}
+
+.cancel-icon-wrap {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(201, 96, 96, 0.08);
+  border: 1px solid rgba(201, 96, 96, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 22px;
+
+  mat-icon {
+    font-size: 36px;
+    height: 36px;
+    width: 36px;
+    color: var(--red);
+  }
+}
+
+h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.cancel-msg {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.65;
+  margin-bottom: 8px;
+}
+
+.action-btns {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 32px;
+  flex-wrap: wrap;
+}

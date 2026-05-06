@@ -1,0 +1,73 @@
+<div class="container" style="padding-top:32px; padding-bottom:48px">
+  <h1 class="page-title">Upravljanje porudžbinama</h1>
+
+  <div class="filters-row">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Pretraži (email, ID)</mat-label>
+      <input matInput [formControl]="searchCtrl">
+      <mat-icon matPrefix>search</mat-icon>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Status</mat-label>
+      <mat-select [(ngModel)]="selectedStatus" (selectionChange)="page=0; load()">
+        <mat-option *ngFor="let s of statuses" [value]="s">{{ statusLabels[s] }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="loading-wrapper" *ngIf="loading"><mat-spinner diameter="40"></mat-spinner></div>
+
+  <mat-card *ngIf="!loading">
+    <table mat-table [dataSource]="orders" class="full-width">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>#</th>
+        <td mat-cell *matCellDef="let o">{{ o.id }}</td>
+      </ng-container>
+      <ng-container matColumnDef="customer">
+        <th mat-header-cell *matHeaderCellDef>Kupac</th>
+        <td mat-cell *matCellDef="let o">
+          <div class="customer-cell">
+            <span>{{ o.userFullName }}</span>
+            <span class="meta">{{ o.userEmail }}</span>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let o">
+          <mat-select [(ngModel)]="o.status" (selectionChange)="updateStatus(o, o.status)"
+                      class="status-select" [style.color]="statusColors[o.status]">
+            <mat-option *ngFor="let s of statuses.slice(1)" [value]="s"
+                        [style.color]="statusColors[s]">{{ statusLabels[s] }}</mat-option>
+          </mat-select>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="total">
+        <th mat-header-cell *matHeaderCellDef>Iznos</th>
+        <td mat-cell *matCellDef="let o"><strong>{{ o.totalAmount | number:'1.0-0' }} RSD</strong></td>
+      </ng-container>
+      <ng-container matColumnDef="items">
+        <th mat-header-cell *matHeaderCellDef>Stavki</th>
+        <td mat-cell *matCellDef="let o">{{ o.items.length }}</td>
+      </ng-container>
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>Datum</th>
+        <td mat-cell *matCellDef="let o">{{ o.createdAt | date:'dd.MM.yy HH:mm' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let o">
+          <button mat-icon-button [routerLink]="['/orders', o.id]" matTooltip="Detalji">
+            <mat-icon>open_in_new</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator [length]="total" [pageSize]="pageSize" [pageIndex]="page"
+                   [pageSizeOptions]="[10,20,50]" (page)="onPage($event)" showFirstLastButtons>
+    </mat-paginator>
+  </mat-card>
+</div>

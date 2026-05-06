@@ -1,0 +1,64 @@
+<div class="auth-page">
+  <div class="auth-card mat-mdc-card">
+    <div class="auth-icon-wrap">
+      <mat-icon>person_add</mat-icon>
+    </div>
+    <div class="auth-heading">Kreirajte nalog</div>
+    <div class="auth-sub">Registrujte se i počnite sa kupovinom</div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="name-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Ime</mat-label>
+          <input matInput formControlName="firstName">
+          <mat-error *ngIf="form.get('firstName')?.hasError('required')">Obavezno</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Prezime</mat-label>
+          <input matInput formControlName="lastName">
+          <mat-error *ngIf="form.get('lastName')?.hasError('required')">Obavezno</mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email adresa</mat-label>
+        <input matInput formControlName="email" type="email">
+        <mat-icon matPrefix>email</mat-icon>
+        <mat-error *ngIf="form.get('email')?.hasError('required')">Email je obavezan</mat-error>
+        <mat-error *ngIf="form.get('email')?.hasError('email')">Unesite ispravan email</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Lozinka</mat-label>
+        <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'">
+        <mat-icon matPrefix>lock</mat-icon>
+        <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        <mat-error *ngIf="form.get('password')?.hasError('required')">Lozinka je obavezna</mat-error>
+        <mat-error *ngIf="form.get('password')?.hasError('minlength')">Minimum 6 karaktera</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Telefon (opciono)</mat-label>
+        <input matInput formControlName="phone" type="tel">
+        <mat-icon matPrefix>phone</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Adresa dostave (opciono)</mat-label>
+        <textarea matInput formControlName="address" rows="2"></textarea>
+        <mat-icon matPrefix>home</mat-icon>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" class="full-width submit-btn" type="submit" [disabled]="loading">
+        <mat-spinner diameter="18" *ngIf="loading"></mat-spinner>
+        {{ loading ? 'Kreiranje naloga...' : 'Registruj se' }}
+      </button>
+    </form>
+
+    <mat-card-actions class="auth-footer">
+      Već imate nalog? <a routerLink="/login">Prijavite se</a>
+    </mat-card-actions>
+  </div>
+</div>

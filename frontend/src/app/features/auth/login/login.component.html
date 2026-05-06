@@ -1,0 +1,38 @@
+<div class="auth-page">
+  <div class="auth-card mat-mdc-card">
+    <div class="auth-icon-wrap">
+      <mat-icon>lock_open</mat-icon>
+    </div>
+    <div class="auth-heading">Dobrodošli nazad</div>
+    <div class="auth-sub">Prijavite se na vaš FurnitureStore nalog</div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email adresa</mat-label>
+        <input matInput formControlName="email" type="email" autocomplete="email">
+        <mat-icon matPrefix>email</mat-icon>
+        <mat-error *ngIf="form.get('email')?.hasError('required')">Email je obavezan</mat-error>
+        <mat-error *ngIf="form.get('email')?.hasError('email')">Unesite ispravan email</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Lozinka</mat-label>
+        <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'" autocomplete="current-password">
+        <mat-icon matPrefix>lock</mat-icon>
+        <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        <mat-error *ngIf="form.get('password')?.hasError('required')">Lozinka je obavezna</mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button color="accent" class="full-width submit-btn" type="submit" [disabled]="loading">
+        <mat-spinner diameter="18" *ngIf="loading"></mat-spinner>
+        {{ loading ? 'Prijavljivanje...' : 'Prijavi se' }}
+      </button>
+    </form>
+
+    <mat-card-actions class="auth-footer">
+      Nemate nalog? <a routerLink="/register">Registrujte se</a>
+    </mat-card-actions>
+  </div>
+</div>

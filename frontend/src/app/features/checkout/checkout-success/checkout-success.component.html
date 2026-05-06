@@ -1,0 +1,65 @@
+<div class="container success-page">
+  <div class="success-card">
+
+    <!-- Icon -->
+    <div class="success-icon-wrap">
+      <mat-icon>check</mat-icon>
+    </div>
+
+    <h1>Plaćanje uspešno!</h1>
+    <p class="success-msg">
+      Vaša porudžbina je primljena i obrađuje se.<br>
+      Uskoro ćete dobiti potvrdu na e-mail.
+    </p>
+
+    <!-- Loading spinner while fetching order -->
+    <div class="order-loading" *ngIf="loading">
+      <mat-spinner diameter="32"></mat-spinner>
+    </div>
+
+    <!-- Order summary -->
+    <div class="order-summary" *ngIf="!loading && order">
+
+      <div class="order-meta">
+        <span class="order-label">Porudžbina #{{ order.id }}</span>
+        <span class="order-status" [class.paid]="order.status === 'PAID'"
+                                   [class.pending]="order.status === 'PENDING'">
+          {{ order.status === 'PAID' ? 'Plaćeno' : 'Obrada u toku...' }}
+        </span>
+      </div>
+
+      <div class="order-items">
+        <div class="order-item" *ngFor="let item of order.items">
+          <img [src]="item.productImageUrl" [alt]="item.productName"
+               onerror="this.style.display='none'">
+          <div class="item-info">
+            <span class="item-name">{{ item.productName }}</span>
+            <span class="item-qty">× {{ item.quantity }}</span>
+          </div>
+          <span class="item-price">{{ formatPrice(item.subtotal) }}</span>
+        </div>
+      </div>
+
+      <div class="order-total">
+        <span>Ukupno</span>
+        <span class="total-amount">{{ formatPrice(order.totalAmount) }}</span>
+      </div>
+
+      <div class="shipping-info">
+        <mat-icon>local_shipping</mat-icon>
+        <span>{{ order.shippingAddress }}</span>
+      </div>
+    </div>
+
+    <!-- Session ref -->
+    <p class="session-id" *ngIf="sessionId && !order">ref: {{ sessionId }}</p>
+
+    <div class="action-btns">
+      <a mat-raised-button color="primary" routerLink="/orders">
+        <mat-icon>receipt_long</mat-icon> Moje porudžbine
+      </a>
+      <a mat-stroked-button routerLink="/products">Nastavi kupovinu</a>
+    </div>
+
+  </div>
+</div>

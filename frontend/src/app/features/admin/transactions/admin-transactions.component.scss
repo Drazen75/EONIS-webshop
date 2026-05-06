@@ -1,0 +1,39 @@
+.full-width { width: 100%; }
+
+.order-link {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+  &:hover { text-decoration: underline; }
+}
+
+.customer-cell {
+  display: flex;
+  flex-direction: column;
+  .name { font-weight: 500; color: var(--text); }
+  .email { font-size: 0.73rem; color: var(--text-muted); margin-top: 2px; }
+}
+
+.info-cell {
+  display: flex;
+  flex-direction: column;
+  .address {
+    font-size: 0.73rem;
+    color: var(--text-muted);
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.chip {
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  border: 1px solid currentColor;
+}
+
+.chip-active { color: var(--green); background: rgba(82,168,130,0.07); }

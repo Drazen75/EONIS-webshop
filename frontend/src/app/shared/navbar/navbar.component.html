@@ -1,0 +1,73 @@
+<mat-toolbar class="navbar">
+  <a routerLink="/" class="brand">
+    <mat-icon>chair</mat-icon>
+    <span class="brand-text">FurnitureStore</span>
+  </a>
+
+  <span class="spacer"></span>
+
+  <!-- Category dropdown -->
+  <div class="cat-trigger-wrap">
+    <button class="cat-trigger nav-link" (click)="toggleCatMenu()">
+      <mat-icon>grid_view</mat-icon>
+      Nameštaj
+      <mat-icon class="drop-icon" [class.open]="catMenuOpen">expand_more</mat-icon>
+    </button>
+
+    <div class="cat-dropdown" [class.visible]="catMenuOpen">
+      <div class="cat-dropdown-header">
+        <span>Kategorije</span>
+        <button mat-icon-button (click)="catMenuOpen = false"><mat-icon>close</mat-icon></button>
+      </div>
+      <div class="cat-dropdown-grid">
+        <button class="cat-item" *ngFor="let cat of categories" (click)="goToCategory(cat.id)">
+          <mat-icon>chevron_right</mat-icon>
+          {{ cat.name }}
+        </button>
+        <button class="cat-item cat-item-all" (click)="goToAllProducts()">
+          <mat-icon>apps</mat-icon>
+          Svi proizvodi
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <a mat-button routerLink="/products" routerLinkActive="active-link" class="nav-link">
+    Katalog
+  </a>
+
+  <!-- Theme toggle -->
+  <button mat-icon-button class="theme-toggle" (click)="theme.toggle()"
+          [matTooltip]="theme.isDark ? 'Svetla tema' : 'Tamna tema'">
+    <mat-icon>{{ theme.isDark ? 'light_mode' : 'dark_mode' }}</mat-icon>
+  </button>
+
+  <div class="nav-divider"></div>
+
+  <ng-container *ngIf="currentUser; else guestMenu">
+    <a mat-icon-button routerLink="/cart" matTooltip="Korpa" class="cart-btn"
+       [matBadge]="cartCount > 0 ? cartCount : null" matBadgeColor="accent">
+      <mat-icon>shopping_cart</mat-icon>
+    </a>
+
+    <button mat-button [matMenuTriggerFor]="userMenu" class="user-btn">
+      <mat-icon>account_circle</mat-icon>
+      {{ currentUser.firstName }}
+      <mat-icon>expand_more</mat-icon>
+    </button>
+    <mat-menu #userMenu="matMenu">
+      <a mat-menu-item routerLink="/orders"><mat-icon>receipt_long</mat-icon> Moje porudžbine</a>
+      <ng-container *ngIf="isAdmin">
+        <mat-divider></mat-divider>
+        <a mat-menu-item routerLink="/admin"><mat-icon>admin_panel_settings</mat-icon> Admin panel</a>
+      </ng-container>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="logout()"><mat-icon>logout</mat-icon> Odjavi se</button>
+    </mat-menu>
+  </ng-container>
+
+  <ng-template #guestMenu>
+    <a mat-button routerLink="/login" class="nav-link">Prijavi se</a>
+    <a mat-raised-button color="accent" routerLink="/register" class="guest-register">Registruj se</a>
+  </ng-template>
+</mat-toolbar>

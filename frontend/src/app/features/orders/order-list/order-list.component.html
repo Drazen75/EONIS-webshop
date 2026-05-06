@@ -1,0 +1,41 @@
+<div class="container" style="padding-top:32px; padding-bottom:48px">
+  <h1 class="page-title">Moje porudžbine</h1>
+
+  <div class="loading-wrapper" *ngIf="loading"><mat-spinner diameter="48"></mat-spinner></div>
+
+  <div class="empty-state" *ngIf="!loading && orders.length === 0">
+    <mat-icon>receipt_long</mat-icon>
+    <h3>Nemate porudžbina</h3>
+    <p>Vaše buduće porudžbine će se prikazati ovde</p>
+    <a mat-raised-button color="primary" routerLink="/products" style="margin-top:16px">Počnite kupovinu</a>
+  </div>
+
+  <mat-card *ngFor="let order of orders" class="order-card" (click)="viewOrder(order.id)">
+    <div class="order-header">
+      <div>
+        <span class="order-id">#{{ order.id }}</span>
+        <span class="order-date">{{ order.createdAt | date:'dd.MM.yyyy HH:mm' }}</span>
+      </div>
+      <span class="status-badge" [style.background]="statusColors[order.status]">
+        {{ statusLabel(order.status) }}
+      </span>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="order-body">
+      <div class="order-items-preview">
+        <span *ngFor="let item of order.items; let last = last">
+          {{ item.productName }} ×{{ item.quantity }}<span *ngIf="!last">, </span>
+        </span>
+      </div>
+      <div class="order-total">
+        <strong>{{ order.totalAmount | number:'1.0-0' }} RSD</strong>
+        <mat-icon>chevron_right</mat-icon>
+      </div>
+    </div>
+  </mat-card>
+
+  <mat-paginator *ngIf="total > pageSize"
+    [length]="total" [pageSize]="pageSize" [pageIndex]="page"
+    (page)="onPage($event)" showFirstLastButtons>
+  </mat-paginator>
+</div>

@@ -1,0 +1,25 @@
+<div class="container" style="padding-top: 52px; padding-bottom: 64px">
+  <div class="admin-header">
+    <p class="admin-eyebrow">Kontrolna tabla</p>
+    <h1>Admin Panel</h1>
+    <p>Upravljajte celokupnom prodavnicom nameštaja</p>
+  </div>
+
+  <div class="dashboard-grid">
+    <a
+      *ngFor="let card of cards"
+      [routerLink]="card.route"
+      class="dash-card"
+      [style.--card-accent]="card.accent"
+      [style.--card-icon-bg]="card.iconBg"
+      [style.--card-icon-border]="card.iconBorder"
+    >
+      <div class="card-icon">
+        <mat-icon>{{ card.icon }}</mat-icon>
+      </div>
+      <h2>{{ card.title }}</h2>
+      <p class="card-desc">{{ card.desc }}</p>
+      <mat-icon class="arrow">arrow_outward</mat-icon>
+    </a>
+  </div>
+</div>

@@ -1,0 +1,79 @@
+<div class="container" style="padding-top:32px; padding-bottom:48px">
+  <h1 class="page-title">Transakcije plaćanja</h1>
+
+  <mat-form-field appearance="outline" style="width:100%; max-width:400px; margin-bottom:16px">
+    <mat-label>Pretraži po emailu ili session ID</mat-label>
+    <input matInput [formControl]="searchCtrl">
+    <mat-icon matPrefix>search</mat-icon>
+  </mat-form-field>
+
+  <div class="loading-wrapper" *ngIf="loading"><mat-spinner diameter="40"></mat-spinner></div>
+
+  <div class="empty-state" *ngIf="!loading && transactions.length === 0">
+    <mat-icon>payments</mat-icon>
+    <h3>Nema transakcija</h3>
+    <p>Transakcije će se pojaviti nakon uspešnih plaćanja</p>
+  </div>
+
+  <mat-card *ngIf="!loading && transactions.length > 0">
+    <table mat-table [dataSource]="transactions" class="full-width">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <td mat-cell *matCellDef="let t">{{ t.id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="order">
+        <th mat-header-cell *matHeaderCellDef>Porudžbina</th>
+        <td mat-cell *matCellDef="let t">
+          <a [routerLink]="['/orders', t.orderId]" class="order-link">#{{ t.orderId }}</a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="customer">
+        <th mat-header-cell *matHeaderCellDef>Kupac</th>
+        <td mat-cell *matCellDef="let t">
+          <div class="customer-cell">
+            <span class="name">{{ t.userFullName }}</span>
+            <span class="email">{{ t.customerEmail }}</span>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="product_info">
+        <th mat-header-cell *matHeaderCellDef>Stavki / Adresa</th>
+        <td mat-cell *matCellDef="let t">
+          <div class="info-cell">
+            <span>{{ t.itemCount }} {{ t.itemCount === 1 ? 'proizvod' : 'proizvoda' }}</span>
+            <span class="address">{{ t.shippingAddress }}</span>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef>Iznos</th>
+        <td mat-cell *matCellDef="let t">
+          <strong>{{ t.amount | number:'1.0-0' }} {{ t.currency }}</strong>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let t">
+          <span class="chip chip-active">{{ t.status }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>Datum</th>
+        <td mat-cell *matCellDef="let t">{{ t.createdAt | date:'dd.MM.yyyy HH:mm' }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [length]="total" [pageSize]="pageSize" [pageIndex]="page"
+                   [pageSizeOptions]="[10,20,50]" (page)="onPage($event)" showFirstLastButtons>
+    </mat-paginator>
+  </mat-card>
+</div>

@@ -1,0 +1,112 @@
+.admin-header {
+  margin-bottom: 44px;
+
+  .admin-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-size: 1.9rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  p { color: var(--text-muted); font-size: 0.88rem; }
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 18px;
+}
+
+.dash-card {
+  display: flex;
+  flex-direction: column;
+  padding: 26px 24px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-decoration: none;
+  color: var(--text);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  position: relative;
+  overflow: hidden;
+
+  // Thin top accent bar
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--card-accent, var(--border-h));
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+  }
+
+  &:hover {
+    border-color: var(--border-h);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-3px);
+
+    &::before { opacity: 1; }
+  }
+
+  .card-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    background: var(--card-icon-bg, rgba(255,255,255,0.05));
+    border: 1px solid var(--card-icon-border, var(--border));
+
+    mat-icon {
+      font-size: 22px;
+      height: 22px;
+      width: 22px;
+      color: var(--card-accent, var(--text-muted));
+    }
+  }
+
+  h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 5px;
+    letter-spacing: -0.1px;
+  }
+
+  .card-desc {
+    font-size: 0.77rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+    flex: 1;
+  }
+
+  .arrow {
+    position: absolute;
+    bottom: 18px;
+    right: 18px;
+    font-size: 17px;
+    height: 17px;
+    width: 17px;
+    color: var(--text-muted);
+    opacity: 0.5;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+  }
+
+  &:hover .arrow {
+    opacity: 1;
+    transform: translate(1px, -1px);
+  }
+}

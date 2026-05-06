@@ -1,0 +1,184 @@
+// ── Hero ──────────────────────────────────────────────────────────────────────
+.hero {
+  position: relative;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 120px 24px 80px;
+  overflow: hidden;
+
+  // Subtle diagonal lines pattern
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(160deg, rgba(99, 144, 196, 0.06) 0%, transparent 50%),
+      linear-gradient(340deg, rgba(197, 162, 107, 0.05) 0%, transparent 50%);
+  }
+
+  // Faint horizontal rule at bottom
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-h), transparent);
+  }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 680px;
+
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 4.5vw, 3.1rem);
+    font-weight: 700;
+    line-height: 1.18;
+    letter-spacing: -0.8px;
+    color: var(--text);
+    margin-bottom: 16px;
+
+    .gold { color: var(--accent); }
+  }
+
+  p {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    margin-bottom: 36px;
+    line-height: 1.65;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+// ── Section labels ────────────────────────────────────────────────────────────
+.section-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.35px;
+  margin-bottom: 24px;
+}
+
+// ── Category grid ─────────────────────────────────────────────────────────────
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+}
+
+.category-card {
+  cursor: pointer;
+  padding: 22px 20px !important;
+  background: var(--bg2) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: none !important;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    border-color: var(--border-h) !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+    transform: translateY(-2px);
+  }
+
+  .cat-icon-wrap {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    background: rgba(197, 162, 107, 0.08);
+    border: 1px solid rgba(197, 162, 107, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+
+    mat-icon {
+      font-size: 20px;
+      height: 20px;
+      width: 20px;
+      color: var(--accent);
+    }
+  }
+
+  .cat-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .cat-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+  }
+
+  .cat-arrow {
+    font-size: 15px;
+    height: 15px;
+    width: 15px;
+    color: var(--text-muted);
+    margin-top: 10px;
+    transition: color 0.18s ease, transform 0.18s ease;
+  }
+
+  &:hover .cat-arrow {
+    color: var(--accent);
+    transform: translateX(2px);
+  }
+}
+
+// ── Product card labels ───────────────────────────────────────────────────────
+.feat-category {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.feat-name {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+// ── CTA strip ─────────────────────────────────────────────────────────────────
+.cta-strip {
+  text-align: center;
+  margin: 44px 0;
+}

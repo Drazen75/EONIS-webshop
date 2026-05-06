@@ -1,0 +1,132 @@
+.cart-layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 24px;
+  align-items: start;
+  @media (max-width: 900px) { grid-template-columns: 1fr; }
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 18px !important;
+  margin-bottom: 10px;
+  transition: border-color 0.18s ease !important;
+  &:hover { border-color: var(--border-h) !important; }
+}
+
+.item-img {
+  width: 84px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 7px;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+}
+
+.item-info { flex: 1; min-width: 0; }
+
+.item-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: var(--text);
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  &:hover { color: var(--accent); }
+}
+
+.item-price {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3px;
+}
+
+.item-qty {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1px 4px;
+
+  span {
+    font-weight: 700;
+    font-size: 0.9rem;
+    min-width: 22px;
+    text-align: center;
+    color: var(--text);
+  }
+}
+
+.item-subtotal {
+  font-weight: 700;
+  font-size: 0.95rem;
+  min-width: 110px;
+  text-align: right;
+  color: var(--accent);
+}
+
+.clear-btn {
+  color: var(--text-muted) !important;
+  border-color: var(--border) !important;
+  font-size: 0.8rem !important;
+
+  &:hover {
+    color: var(--red) !important;
+    border-color: rgba(201, 96, 96, 0.3) !important;
+    background: rgba(201, 96, 96, 0.05) !important;
+  }
+}
+
+.order-summary {
+  position: sticky;
+  top: 80px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.865rem;
+  margin-bottom: 9px;
+  color: var(--text-muted);
+
+  span:last-child { color: var(--text); font-weight: 500; }
+}
+
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--text);
+}
+
+.checkout-btn {
+  width: 100% !important;
+  height: 50px !important;
+  font-size: 0.92rem !important;
+  font-weight: 700 !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 8px !important;
+  margin-top: 4px;
+}
+
+.secure-note {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  margin-top: 10px;
+
+  mat-icon { font-size: 13px; height: 13px; width: 13px; }
+}

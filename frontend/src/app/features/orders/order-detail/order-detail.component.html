@@ -1,0 +1,61 @@
+<div class="container" style="padding-top:32px; padding-bottom:48px; max-width:860px">
+  <button mat-button routerLink="/orders"><mat-icon>arrow_back</mat-icon> Sve porudžbine</button>
+
+  <div class="loading-wrapper" *ngIf="loading"><mat-spinner diameter="48"></mat-spinner></div>
+
+  <ng-container *ngIf="order && !loading">
+    <div class="order-header">
+      <div>
+        <h1 class="page-title" style="margin-bottom:4px">Porudžbina #{{ order.id }}</h1>
+        <span class="order-date">{{ order.createdAt | date:'dd.MM.yyyy HH:mm' }}</span>
+      </div>
+      <span class="status-badge" [style.background]="statusColors[order.status]">
+        {{ statusLabel(order.status) }}
+      </span>
+    </div>
+
+    <div class="detail-grid">
+      <mat-card>
+        <mat-card-header><mat-card-title>Stavke porudžbine</mat-card-title></mat-card-header>
+        <mat-card-content>
+          <div class="order-item" *ngFor="let item of order.items">
+            <img [src]="item.productImageUrl || 'https://placehold.co/80x60'" [alt]="item.productName" class="item-img">
+            <div class="item-info">
+              <span class="item-name">{{ item.productName }}</span>
+              <span class="item-meta">{{ item.quantity }} × {{ item.priceAtPurchase | number:'1.0-0' }} RSD</span>
+            </div>
+            <strong>{{ item.subtotal | number:'1.0-0' }} RSD</strong>
+          </div>
+          <mat-divider style="margin: 16px 0"></mat-divider>
+          <div class="total-row">
+            <span>Ukupno</span>
+            <span class="price-tag">{{ order.totalAmount | number:'1.0-0' }} RSD</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header><mat-card-title>Detalji dostave</mat-card-title></mat-card-header>
+        <mat-card-content>
+          <mat-list>
+            <mat-list-item>
+              <mat-icon matListItemIcon>location_on</mat-icon>
+              <span matListItemTitle>Adresa dostave</span>
+              <span matListItemLine>{{ order.shippingAddress }}</span>
+            </mat-list-item>
+            <mat-list-item>
+              <mat-icon matListItemIcon>person</mat-icon>
+              <span matListItemTitle>Korisnik</span>
+              <span matListItemLine>{{ order.userEmail }}</span>
+            </mat-list-item>
+            <mat-list-item *ngIf="order.stripeSessionId">
+              <mat-icon matListItemIcon>payment</mat-icon>
+              <span matListItemTitle>Stripe sesija</span>
+              <span matListItemLine class="session-id">{{ order.stripeSessionId }}</span>
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </ng-container>
+</div>

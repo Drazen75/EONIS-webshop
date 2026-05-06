@@ -1,0 +1,189 @@
+.navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  height: 64px !important;
+  background: rgba(12, 14, 19, 0.94) !important;
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+
+  .light-theme & {
+    background: rgba(245, 243, 239, 0.95) !important;
+    border-bottom-color: var(--border);
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+  color: var(--text);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.1px;
+  flex-shrink: 0;
+
+  mat-icon { font-size: 20px; height: 20px; width: 20px; color: var(--accent); }
+}
+
+.nav-link {
+  color: var(--text-muted) !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  border-radius: 6px !important;
+  transition: color 0.18s ease, background 0.18s ease !important;
+
+  &:hover { color: var(--text) !important; background: rgba(128,128,128,0.08) !important; }
+}
+
+.active-link { color: var(--text) !important; background: rgba(128,128,128,0.07) !important; }
+
+// ── Category dropdown ─────────────────────────────────────────────────────────
+.cat-trigger-wrap {
+  position: relative;
+}
+
+.cat-trigger {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 12px !important;
+  height: 36px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: color 0.18s ease, background 0.18s ease;
+
+  mat-icon { font-size: 17px; height: 17px; width: 17px; }
+
+  &:hover { color: var(--text); background: rgba(128,128,128,0.08); }
+
+  .drop-icon {
+    transition: transform 0.2s ease;
+    &.open { transform: rotate(180deg); }
+  }
+}
+
+.cat-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  min-width: 260px;
+  background: var(--bg2);
+  border: 1px solid var(--border-h);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  z-index: 2000;
+  overflow: hidden;
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+}
+
+.cat-dropdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px 10px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--text-muted);
+}
+
+.cat-dropdown-grid {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cat-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border: none;
+  background: none;
+  border-radius: 7px;
+  cursor: pointer;
+  color: var(--text);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: left;
+  width: 100%;
+  transition: background 0.15s ease, color 0.15s ease;
+
+  mat-icon { font-size: 16px; height: 16px; width: 16px; color: var(--text-muted); }
+
+  &:hover {
+    background: rgba(128,128,128,0.07);
+    color: var(--accent);
+    mat-icon { color: var(--accent); }
+  }
+}
+
+.cat-item-all {
+  margin-top: 4px;
+  border-top: 1px solid var(--border);
+  padding-top: 11px;
+  color: var(--primary);
+  mat-icon { color: var(--primary); }
+  &:hover { background: rgba(99,144,196,0.06); color: var(--primary-h); }
+}
+
+// ── Theme toggle ──────────────────────────────────────────────────────────────
+.theme-toggle {
+  color: var(--text-muted) !important;
+  &:hover { color: var(--text) !important; }
+}
+
+// ── Other nav elements ────────────────────────────────────────────────────────
+.cart-btn {
+  color: var(--text-muted) !important;
+  &:hover { color: var(--text) !important; }
+}
+
+.user-btn {
+  color: var(--text) !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  border-radius: 6px !important;
+  border: 1px solid var(--border) !important;
+  padding: 0 14px !important;
+  transition: border-color 0.18s, background 0.18s !important;
+  &:hover { border-color: var(--border-h) !important; background: rgba(128,128,128,0.05) !important; }
+}
+
+.guest-register {
+  background: var(--accent) !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+  box-shadow: none !important;
+  border-radius: 6px !important;
+  padding: 0 16px !important;
+  transition: background 0.18s ease !important;
+  &:hover { background: var(--accent-h) !important; }
+}
+
+.nav-divider {
+  width: 1px;
+  height: 22px;
+  background: var(--border);
+  margin: 0 6px;
+}
