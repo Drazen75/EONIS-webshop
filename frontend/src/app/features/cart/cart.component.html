@@ -26,8 +26,7 @@
             <mat-icon>remove</mat-icon>
           </button>
           <span>{{ item.quantity }}</span>
-          <button mat-icon-button (click)="updateQty(item.productId, item.quantity + 1)"
-                  [disabled]="item.quantity >= item.stockQuantity">
+          <button mat-icon-button (click)="updateQty(item.productId, item.quantity + 1)">
             <mat-icon>add</mat-icon>
           </button>
         </div>
