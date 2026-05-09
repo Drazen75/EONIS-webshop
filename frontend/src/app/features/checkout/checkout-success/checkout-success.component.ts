@@ -26,6 +26,10 @@ export class CheckoutSuccessComponent implements OnInit {
   ngOnInit(): void {
     this.sessionId = this.route.snapshot.queryParamMap.get('session_id');
 
+    // Payment succeeded — discard the pending-order marker so /checkout/cancel
+    // wouldn't attempt to roll back this order if visited later.
+    sessionStorage.removeItem('pendingOrderId');
+
     // Clear cart on both frontend state and backend
     this.cartService.clear().subscribe({ error: () => this.cartService.reset() });
 

@@ -33,6 +33,10 @@ export class OrderService {
     });
   }
 
+  cancelOrder(id: number): Observable<Order> {
+    return this.http.post<Order>(`${this.api}/${id}/cancel`, {});
+  }
+
   // Admin
   getAllOrders(params: { status?: string; search?: string; page?: number; size?: number }): Observable<PagedResponse<Order>> {
     let p = new HttpParams().set('sort', 'createdAt,desc');
