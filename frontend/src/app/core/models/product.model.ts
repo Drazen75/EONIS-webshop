@@ -7,7 +7,7 @@ export interface Product {
   price: number;
   stockQuantity: number;
   imageUrl: string;
-  category: Category;
+  category: Category | null;
   active: boolean;
   createdAt: string;
 }

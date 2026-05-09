@@ -1,12 +1,11 @@
 package com.furniture.store.controller;
 
-import com.furniture.store.model.Order;
 import com.furniture.store.model.Transaction;
 import com.furniture.store.model.enums.OrderStatus;
 import com.furniture.store.repository.CartRepository;
 import com.furniture.store.repository.OrderRepository;
-import com.furniture.store.repository.ProductRepository;
 import com.furniture.store.repository.TransactionRepository;
+import com.furniture.store.service.OrderService;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.model.Event;
 import com.stripe.model.checkout.Session;
@@ -27,9 +26,9 @@ import java.math.BigDecimal;
 public class WebhookController {
 
     private final OrderRepository orderRepository;
-    private final ProductRepository productRepository;
     private final TransactionRepository transactionRepository;
     private final CartRepository cartRepository;
+    private final OrderService orderService;
 
     @Value("${stripe.webhook-secret}")
     private String webhookSecret;
@@ -68,13 +67,8 @@ public class WebhookController {
                 order.setStatus(OrderStatus.PAID);
                 orderRepository.save(order);
 
-                // Decrement stock for each ordered item
-                order.getItems().forEach(item -> {
-                    int newStock = item.getProduct().getStockQuantity() - item.getQuantity();
-                    if (newStock < 0) newStock = 0;
-                    item.getProduct().setStockQuantity(newStock);
-                    productRepository.save(item.getProduct());
-                });
+                // Stock was already decremented at order creation time
+                // (see OrderService.createCheckoutSession). Nothing to do here.
 
                 // Clear cart — explicit save triggers orphanRemoval on items
                 var cart = order.getUser().getCart();
@@ -103,6 +97,18 @@ public class WebhookController {
                             orderId, session.getCustomerEmail(), amount, session.getCurrency());
                 }
             });
+        } else if ("checkout.session.expired".equals(event.getType())) {
+            // User abandoned the Stripe page; Stripe expires the session
+            // (default ~24h). Roll the order back so stock returns to inventory.
+            Session session = (Session) event.getDataObjectDeserializer()
+                    .getObject()
+                    .orElse(null);
+
+            if (session != null) {
+                orderService.expireBySessionId(session.getId());
+                log.info("Stripe session {} expired — order cancelled, stock restored.",
+                        session.getId());
+            }
         }
 
         return ResponseEntity.ok("OK");

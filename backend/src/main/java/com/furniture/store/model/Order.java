@@ -39,6 +39,15 @@ public class Order {
 
     private String stripeSessionId;
 
+    /**
+     * Whether the stock decremented at order creation has already been
+     * returned to inventory. Set to true once cancelOrder/expireOrder runs,
+     * so subsequent cancellations don't double-restore stock.
+     */
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    @Builder.Default
+    private boolean stockReturned = false;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<OrderItem> items = new ArrayList<>();

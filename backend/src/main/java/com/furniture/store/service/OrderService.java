@@ -5,6 +5,7 @@ import com.furniture.store.dto.order.CreateCheckoutSessionRequest;
 import com.furniture.store.dto.order.OrderItemResponse;
 import com.furniture.store.dto.order.OrderResponse;
 import com.furniture.store.exception.InsufficientStockException;
+import com.furniture.store.exception.PaymentInitializationException;
 import com.furniture.store.exception.ResourceNotFoundException;
 import com.furniture.store.model.*;
 import com.furniture.store.repository.UserRepository;
@@ -71,6 +72,11 @@ public class OrderService {
         for (CartItem cartItem : cart.getItems()) {
             Product product = cartItem.getProduct();
 
+            // Decrement stock at order time. If Stripe init fails below,
+            // the surrounding @Transactional rolls everything back automatically.
+            product.setStockQuantity(product.getStockQuantity() - cartItem.getQuantity());
+            productRepository.save(product);
+
             OrderItem orderItem = OrderItem.builder()
                     .order(order)
                     .product(product)
@@ -94,9 +100,10 @@ public class OrderService {
             orderRepository.save(order);
             return new CheckoutSessionResponse(session.getUrl(), order.getId());
         } catch (StripeException e) {
-            order.setStatus(OrderStatus.FAILED);
-            orderRepository.save(order);
-            throw new RuntimeException("Payment initialization failed: " + e.getMessage());
+            // Throwing PaymentInitializationException triggers @Transactional rollback,
+            // which restores the stock decrement above and discards the order.
+            throw new PaymentInitializationException(
+                    "Stripe checkout session failed: " + e.getMessage(), e);
         }
     }
 
@@ -140,8 +147,74 @@ public class OrderService {
     public OrderResponse updateStatus(Long id, OrderStatus status) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order", id));
+
+        // If admin moves the order into CANCELLED/FAILED, restore stock first.
+        if ((status == OrderStatus.CANCELLED || status == OrderStatus.FAILED)
+                && !order.isStockReturned()) {
+            restoreStock(order);
+        }
+
         order.setStatus(status);
         return toResponse(orderRepository.save(order));
+    }
+
+    /**
+     * Cancels an order owned by the given user. Returns stock to inventory
+     * (idempotent — stockReturned flag prevents double restore).
+     * Allowed only while the order is still PENDING (i.e. not paid yet).
+     */
+    @Transactional
+    public OrderResponse cancelOwnOrder(String email, Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order", orderId));
+
+        if (!order.getUser().getEmail().equals(email)) {
+            throw new ResourceNotFoundException("Order", orderId);
+        }
+
+        // Canceled no-op
+        if (order.getStatus() == OrderStatus.CANCELLED) {
+            return toResponse(order);
+        }
+
+        // Don't allow user to cancel orders that are already paid or further along
+        if (order.getStatus() != OrderStatus.PENDING) {
+            throw new IllegalArgumentException(
+                    "Order cannot be cancelled in status " + order.getStatus());
+        }
+
+        if (!order.isStockReturned()) {
+            restoreStock(order);
+        }
+        order.setStatus(OrderStatus.CANCELLED);
+        return toResponse(orderRepository.save(order));
+    }
+
+    /**
+     * Cancels an order found by Stripe session id. Used by webhook on
+     * `checkout.session.expired`. Idempotent.
+     */
+    @Transactional
+    public void expireBySessionId(String sessionId) {
+        orderRepository.findByStripeSessionId(sessionId).ifPresent(order -> {
+            if (order.getStatus() == OrderStatus.PENDING) {
+                if (!order.isStockReturned()) {
+                    restoreStock(order);
+                }
+                order.setStatus(OrderStatus.CANCELLED);
+                orderRepository.save(order);
+            }
+        });
+    }
+
+    /** Adds back the quantity of every order item to its product's stock. */
+    private void restoreStock(Order order) {
+        for (OrderItem item : order.getItems()) {
+            Product product = item.getProduct();
+            product.setStockQuantity(product.getStockQuantity() + item.getQuantity());
+            productRepository.save(product);
+        }
+        order.setStockReturned(true);
     }
 
     public Page<OrderResponse> getUserOrdersByEmail(String email, Pageable pageable) {

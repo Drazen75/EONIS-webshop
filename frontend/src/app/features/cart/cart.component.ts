@@ -74,6 +74,9 @@ export class CartComponent implements OnInit {
     this.checkingOut = true;
     this.orderService.checkout(this.shippingCtrl.value.trim()).subscribe({
       next: res => {
+        // Remember the pending order id so the cancel page can roll it back
+        // (releases stock) if the user aborts on Stripe.
+        sessionStorage.setItem('pendingOrderId', String(res.orderId));
         window.location.href = res.checkoutUrl;
       },
       error: err => {
