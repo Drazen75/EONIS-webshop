@@ -75,12 +75,11 @@ public class CartService {
     @Transactional
     public CartResponse updateItem(String email, Long productId, UpdateCartItemRequest request) {
         Cart cart = getOrCreateCart(email);
-        Product product = productService.findById(productId);
 
-        // Business rule: cannot set quantity higher than available stock
-        if (request.getQuantity() > product.getStockQuantity()) {
-            throw new InsufficientStockException(product.getName(), request.getQuantity(), product.getStockQuantity());
-        }
+        // Note: stock validation intentionally removed here.
+        // Cart is just a wishlist — stock is verified again at checkout time
+        // (see OrderService.createCheckoutSession), and decremented only after
+        // successful Stripe payment (see WebhookController).
 
         CartItem item = cartItemRepository.findByCartIdAndProductId(cart.getId(), productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Cart item not found"));
