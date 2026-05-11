@@ -71,8 +71,11 @@
           <button mat-icon-button color="primary" (click)="edit(p.id)" matTooltip="Izmeni">
             <mat-icon>edit</mat-icon>
           </button>
-          <button mat-icon-button color="warn" (click)="delete(p)" matTooltip="Deaktiviraj">
+          <button *ngIf="p.active" mat-icon-button color="warn" (click)="delete(p)" matTooltip="Deaktiviraj">
             <mat-icon>block</mat-icon>
+          </button>
+          <button *ngIf="!p.active" mat-icon-button color="accent" (click)="activate(p)" matTooltip="Aktiviraj">
+            <mat-icon>check_circle</mat-icon>
           </button>
         </td>
       </ng-container>

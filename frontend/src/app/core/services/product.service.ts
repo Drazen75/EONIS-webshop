@@ -34,6 +34,11 @@ export class ProductService {
     return this.http.get<Product>(`${this.api}/${id}`);
   }
 
+  /** Admin verzija — vraća i neaktivne proizvode (potrebno za otvaranje edit forme). */
+  getByIdAdmin(id: number): Observable<Product> {
+    return this.http.get<Product>(`${this.api}/admin/${id}`);
+  }
+
   getAllAdmin(params: { search?: string; categoryId?: number; page?: number; size?: number }): Observable<PagedResponse<Product>> {
     let p = new HttpParams();
     if (params.search)     p = p.set('search', params.search);
@@ -53,5 +58,9 @@ export class ProductService {
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.api}/${id}`);
+  }
+
+  activate(id: number): Observable<Product> {
+    return this.http.patch<Product>(`${this.api}/${id}/activate`, {});
   }
 }
