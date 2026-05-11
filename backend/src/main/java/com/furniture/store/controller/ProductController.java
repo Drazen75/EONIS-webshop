@@ -56,6 +56,12 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping("/{id}/activate")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ProductResponse> activate(@PathVariable Long id) {
+        return ResponseEntity.ok(productService.activate(id));
+    }
+
     @GetMapping("/admin/all")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<ProductResponse>> getAllAdmin(
@@ -63,5 +69,16 @@ public class ProductController {
             @RequestParam(required = false) Long categoryId,
             @PageableDefault(size = 20) Pageable pageable) {
         return ResponseEntity.ok(productService.getAllForAdmin(search, categoryId, pageable));
+    }
+
+    /**
+     * Admin verzija getById koja vraća i neaktivne (soft-delete-ovane) proizvode.
+     * Public getById baca 404 za neaktivne da bi ih sakrio od običnog kataloga,
+     * ali admin form za izmjenu treba da ih može učitati radi reaktivacije.
+     */
+    @GetMapping("/admin/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ProductResponse> getByIdAdmin(@PathVariable Long id) {
+        return ResponseEntity.ok(productService.getByIdAdmin(id));
     }
 }

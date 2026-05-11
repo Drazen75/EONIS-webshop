@@ -46,7 +46,7 @@ export class AdminProductFormComponent implements OnInit {
       this.isEdit = true;
       this.productId = +id;
       this.loading = true;
-      this.productService.getById(this.productId).subscribe({
+      this.productService.getByIdAdmin(this.productId).subscribe({
         next: p => {
           this.form.patchValue({
             name: p.name, description: p.description, price: p.price,

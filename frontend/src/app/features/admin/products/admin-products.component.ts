@@ -72,4 +72,14 @@ export class AdminProductsComponent implements OnInit {
       });
     });
   }
+
+  activate(product: Product): void {
+    this.productService.activate(product.id).subscribe({
+      next: () => {
+        this.snack.open('Proizvod aktiviran', 'OK', { duration: 2500, panelClass: 'success-snack' });
+        this.load();
+      },
+      error: () => this.snack.open('Greška pri aktivaciji', 'OK', { duration: 2500, panelClass: 'error-snack' })
+    });
+  }
 }

@@ -97,6 +97,14 @@ public class ProductService {
         productRepository.save(product);
     }
 
+    /** Reaktivira soft-delete-ovani proizvod (postavlja active = true). */
+    @Transactional
+    public ProductResponse activate(Long id) {
+        Product product = findById(id);
+        product.setActive(true);
+        return toResponse(productRepository.save(product));
+    }
+
     public Product findById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product", id));
